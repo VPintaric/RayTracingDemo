@@ -1,0 +1,6 @@
+[submodule "external/sfml"]
+	path = external/sfml
+	url = git@github.com:SFML/SFML.git
+[submodule "external/glm"]
+	path = external/glm
+	url = git@github.com:g-truc/glm.git
