@@ -1,7 +1,10 @@
 # Setup the targets
 add_executable(RayTracingDemo
-        utility/logger.hpp
+        raytracer/ray_tracer.cpp
+        raytracer/ray_tracer.hpp
+        scene/scene.hpp
         utility/logger.cpp
+        utility/logger.hpp
         main.cpp)
 
 target_link_libraries(RayTracingDemo
