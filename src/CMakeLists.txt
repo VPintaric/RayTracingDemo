@@ -3,6 +3,8 @@ add_executable(RayTracingDemo
         raytracer/ray_tracer.cpp
         raytracer/ray_tracer.hpp
         scene/scene.hpp
+        utility/conversions.cpp
+        utility/conversions.hpp
         utility/logger.cpp
         utility/logger.hpp
         main.cpp)

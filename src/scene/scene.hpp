@@ -38,12 +38,18 @@ struct Shape {
     };
 };
 
+struct Light {
+    glm::dvec3 position;
+    sf::Color color;
+};
+
 struct Scene {
     std::vector< Shape > shapes;
+    std::vector< Light > lights;
     glm::dvec3 cameraPosition;
     glm::dvec3 cameraDirection;
-    double widthFieldOfView;
-    double heightFieldOfView;
+    double widthFieldOfView; // radians
+    double heightFieldOfView; // radians
 };
 
 #endif //RAYTRACINGDEMO_SCENE_HPP
