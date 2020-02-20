@@ -26,14 +26,14 @@ int main() {
 
             shape.type = ShapeType::Sphere;
             shape.color = glm::dvec3{ 1.0, 0.0, 0.0 };
-            shape.shininess = 0.3;
+            shape.reflectiveness = 0.3;
             shape.sphere.position = glm::dvec3{ 0.0, 0.0, 0.0 };
             shape.sphere.radius = 2.0;
             scene.shapes.push_back( shape );
 
             shape.type = ShapeType::Sphere;
             shape.color = glm::dvec3{ 0.0, 1.0, 0.0 };
-            shape.shininess = 0.6;
+            shape.reflectiveness = 0.6;
             shape.sphere.position = glm::dvec3{ 0.0, 4.0, 0.0 };
             shape.sphere.radius = 2.0;
             scene.shapes.push_back( shape );

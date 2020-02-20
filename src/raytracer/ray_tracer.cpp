@@ -31,7 +31,7 @@ sf::Image RayTracer::render( const Scene &scene, unsigned width, unsigned height
         for ( unsigned i = 0; i < width; ++i ) {
             pixelRay = glm::rotate( pixelRay, fovWidthPerPixel, up_ );
 
-            image.setPixel( i, j, toSfmlColor( rayTrace( scene, scene.cameraPosition, pixelRay )));
+            image.setPixel( i, j, toSfmlColor( generateColor( scene, scene.cameraPosition, pixelRay )));
         }
 
         pixelRay = glm::rotate( pixelRay, -scene.widthFieldOfView, up_ );
@@ -40,8 +40,25 @@ sf::Image RayTracer::render( const Scene &scene, unsigned width, unsigned height
     return image;
 }
 
-glm::dvec3 RayTracer::rayTrace( const Scene &scene,
-                                const glm::dvec3 &rayOrigin, const glm::dvec3 &rayDirection ) const {
+glm::dvec3 RayTracer::generateColor( const Scene &scene, const glm::dvec3 &rayOrigin,
+                                     const glm::dvec3 &rayDirection ) const {
+
+    auto[color, background] = rayTrace( scene, rayOrigin, rayDirection, 1 );
+
+    if ( background ) {
+        return glm::dvec3{};
+    } else {
+        return color;
+    }
+}
+
+std::pair< glm::dvec3, bool > RayTracer::rayTrace( const Scene &scene,
+                                                   const glm::dvec3 &rayOrigin, const glm::dvec3 &rayDirection,
+                                                   const int traceDepth ) const {
+
+    if ( traceDepth == 0 ) {
+        return std::make_pair( glm::dvec3{}, true );
+    }
 
     bool foundIntersection = false;
     double intersectionDistance;
@@ -61,33 +78,27 @@ glm::dvec3 RayTracer::rayTrace( const Scene &scene,
 
     if ( foundIntersection ) {
         auto intersectionPoint = rayOrigin + intersectionDistance * rayDirection;
-        glm::dvec3 color{ 0.0, 0.0, 0.0 };
+        glm::dvec3 color{};
 
-        auto reflectedRay = glm::reflect( rayDirection, intersectionNormal );
+//        auto reflectedRay = glm::reflect( rayDirection, intersectionNormal );
 
         for ( const auto &light : scene.lights ) {
             if ( !isShadowed( scene, light, intersectionPoint )) {
                 auto towardsLight = glm::normalize( light.position - intersectionPoint );
 
-                // Add diffuse lighting
-                {
-                    auto intensity = std::max( glm::dot( towardsLight, intersectionNormal ), 0.0 );
-                    color += intensity * light.color * intersectionShape->color;
-                }
+                auto diffuseIntensity = std::max( glm::dot( towardsLight, intersectionNormal ), 0.0 );
+                auto diffuseColor = diffuseIntensity * light.color * intersectionShape->color;
 
-                // Add specular lighting
-                {
-                    auto intensity = std::max( glm::dot( towardsLight, reflectedRay ), 0.0 );
-                    intensity *= intersectionShape->shininess;
-                    color += intensity * light.color;
-                }
+                // TODO: add reflected color and/or specular
+
+                color += diffuseColor;
             }
         }
 
-        return color;
+        return std::make_pair( color, false );
     }
 
-    return glm::dvec3{ 0.0, 0.0, 0.0 };
+    return std::make_pair( glm::dvec3{}, true );
 }
 
 std::tuple< bool, double, glm::dvec3 > RayTracer::checkCollision( const Shape &shape, const glm::dvec3 &rayOrigin,

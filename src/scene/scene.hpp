@@ -32,7 +32,7 @@ struct Cuboid {
 struct Shape {
     ShapeType type;
     glm::dvec3 color;
-    double shininess;
+    double reflectiveness;
     union {
         Sphere sphere;
         Cuboid cuboid;

@@ -23,7 +23,10 @@ private:
 
     Logger &logger_;
 
-    glm::dvec3 rayTrace( const Scene &scene, const glm::dvec3 &rayOrigin, const glm::dvec3 &rayDirection ) const;
+    glm::dvec3 generateColor( const Scene &scene, const glm::dvec3 &rayOrigin, const glm::dvec3 &rayDirection ) const;
+
+    std::pair< glm::dvec3, bool > rayTrace( const Scene &scene, const glm::dvec3 &rayOrigin,
+                                            const glm::dvec3 &rayDirection, const int traceDepth ) const;
 
     std::tuple< bool, double, glm::dvec3 >
     checkCollision( const Shape &shape, const glm::dvec3 &rayOrigin, const glm::dvec3 &rayDirection ) const;
