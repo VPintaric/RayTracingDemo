@@ -61,12 +61,25 @@ sf::Color RayTracer::rayTrace( const Scene &scene, const glm::dvec3 &rayOrigin, 
         auto intersectionPoint = rayOrigin + intersectionDistance * rayDirection;
         sf::Color color = sf::Color::Black;
 
+        auto reflectedRay = glm::reflect( rayDirection, intersectionNormal );
+
         for ( const auto &light : scene.lights ) {
             if ( !isShadowed( scene, light, intersectionPoint )) {
                 auto towardsLight = glm::normalize( light.position - intersectionPoint );
-                auto intensity = glm::dot( towardsLight, intersectionNormal );
 
-                color += toSfmlColor( intensity * toGlmColor( light.color ) * toGlmColor( intersectionShape->color ));
+                // Add diffuse lighting
+                {
+                    auto intensity = glm::dot( towardsLight, intersectionNormal );
+                    color += toSfmlColor(
+                        intensity * toGlmColor( light.color ) * toGlmColor( intersectionShape->color ));
+                }
+
+                // Add specular lighting
+                {
+                    auto intensity = intersectionShape->shininess * glm::dot( towardsLight, reflectedRay );
+                    color += toSfmlColor(
+                        intensity * toGlmColor( light.color ) * toGlmColor( intersectionShape->color ));
+                }
             }
         }
 

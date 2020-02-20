@@ -26,12 +26,14 @@ int main() {
 
             shape.type = ShapeType::Sphere;
             shape.color = sf::Color::Red;
+            shape.shininess = 0.3;
             shape.sphere.position = glm::dvec3{ 0.0, 0.0, 0.0 };
             shape.sphere.radius = 2.0;
             scene.shapes.push_back( shape );
 
             shape.type = ShapeType::Sphere;
             shape.color = sf::Color::Blue;
+            shape.shininess = 0.6;
             shape.sphere.position = glm::dvec3{ 0.0, 4.0, 0.0 };
             shape.sphere.radius = 2.0;
             scene.shapes.push_back( shape );
@@ -40,13 +42,13 @@ int main() {
         {
             Light light;
 
-            light.color = sf::Color::White;
-            light.position = glm::dvec3{ 0.0, 20.0, 0.0 };
-            scene.lights.push_back( light );
-
-            light.color = sf::Color( 100, 100, 100 );
-            light.position = glm::dvec3{ 0.0, -20.0, 0.0 };
-            scene.lights.push_back( light );
+//            light.color = sf::Color::White;
+//            light.position = glm::dvec3{ 0.0, 20.0, 0.0 };
+//            scene.lights.push_back( light );
+//
+//            light.color = sf::Color( 100, 100, 100 );
+//            light.position = glm::dvec3{ 0.0, -20.0, 0.0 };
+//            scene.lights.push_back( light );
 
             light.color = sf::Color::White;
             light.position = glm::dvec3{ 50.0, 0.0, 0.0 };

@@ -32,6 +32,7 @@ struct Cuboid {
 struct Shape {
     ShapeType type;
     sf::Color color;
+    double shininess;
     union {
         Sphere sphere;
         Cuboid cuboid;
