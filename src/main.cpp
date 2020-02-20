@@ -32,8 +32,9 @@ int main() {
 
         {
             Light light;
-            light.color = sf::Color::Blue;
-            light.position = glm::dvec3{ 1.0, 20.0, 3.0 };
+            light.color = sf::Color::White;
+            light.position = glm::dvec3{ 18.0, 20.0, 3.0 };
+            scene.lights.push_back( light );
         }
 
         scene.cameraPosition = glm::dvec3{ 18.0, 2.0, 3.0 };

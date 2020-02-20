@@ -20,13 +20,13 @@ sf::Image RayTracer::render( const Scene &scene, unsigned width, unsigned height
 
     auto pixelRay = scene.cameraDirection;
     pixelRay = glm::rotate( pixelRay, -scene.widthFieldOfView / 2.0, up_ );
-    pixelRay = glm::rotate( pixelRay, scene.heightFieldOfView / 2.0, glm::cross( up_, pixelRay ));
+    pixelRay = glm::rotate( pixelRay, -scene.heightFieldOfView / 2.0, glm::cross( up_, pixelRay ));
 
     auto fovWidthPerPixel = scene.widthFieldOfView / width;
     auto fovHeightPerPixel = scene.heightFieldOfView / height;
 
     for ( unsigned j = 0; j < height; ++j ) {
-        pixelRay = glm::rotate( pixelRay, -fovHeightPerPixel, glm::cross( up_, pixelRay ));
+        pixelRay = glm::rotate( pixelRay, fovHeightPerPixel, glm::cross( up_, pixelRay ));
 
         for ( unsigned i = 0; i < width; ++i ) {
             pixelRay = glm::rotate( pixelRay, fovWidthPerPixel, up_ );
@@ -59,12 +59,12 @@ sf::Color RayTracer::rayTrace( const Scene &scene, const glm::dvec3 &rayOrigin, 
 
     if ( foundIntersection ) {
         auto intersectionPoint = rayOrigin + intersectionDistance * rayDirection;
-        sf::Color color = sf::Color::White;
+        sf::Color color = sf::Color::Black;
 
         for ( const auto &light : scene.lights ) {
             if ( !isShadowed( scene, light, intersectionPoint )) {
                 auto towardsLight = glm::normalize( light.position - intersectionPoint );
-                auto intensity = towardsLight * intersectionNormal;
+                auto intensity = glm::dot( towardsLight, intersectionNormal );
 
                 color += toSfmlColor( intensity * toGlmColor( light.color ) * toGlmColor( intersectionShape->color ));
             }
