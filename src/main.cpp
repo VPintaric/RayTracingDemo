@@ -23,22 +23,38 @@ int main() {
     {
         {
             Shape shape;
+
             shape.type = ShapeType::Sphere;
             shape.color = sf::Color::Red;
-            shape.sphere.position = glm::dvec3{ 1.0, 2.0, 3.0 };
-            shape.sphere.radius = 10.0;
+            shape.sphere.position = glm::dvec3{ 0.0, 0.0, 0.0 };
+            shape.sphere.radius = 2.0;
+            scene.shapes.push_back( shape );
+
+            shape.type = ShapeType::Sphere;
+            shape.color = sf::Color::Blue;
+            shape.sphere.position = glm::dvec3{ 0.0, 4.0, 0.0 };
+            shape.sphere.radius = 2.0;
             scene.shapes.push_back( shape );
         }
 
         {
             Light light;
+
             light.color = sf::Color::White;
-            light.position = glm::dvec3{ 18.0, 20.0, 3.0 };
+            light.position = glm::dvec3{ 0.0, 20.0, 0.0 };
+            scene.lights.push_back( light );
+
+            light.color = sf::Color( 100, 100, 100 );
+            light.position = glm::dvec3{ 0.0, -20.0, 0.0 };
+            scene.lights.push_back( light );
+
+            light.color = sf::Color::White;
+            light.position = glm::dvec3{ 50.0, 0.0, 0.0 };
             scene.lights.push_back( light );
         }
 
-        scene.cameraPosition = glm::dvec3{ 18.0, 2.0, 3.0 };
-        scene.cameraDirection = glm::normalize( glm::dvec3{ -11.0, 0.0, 0.0 } );
+        scene.cameraPosition = glm::dvec3{ 30.0, 0.0, 0.0 };
+        scene.cameraDirection = glm::normalize( glm::dvec3{ -1.0, 0.0, 0.0 } );
         scene.heightFieldOfView = glm::radians( 60.0 );
         scene.widthFieldOfView = glm::radians( 90.0 );
     }
