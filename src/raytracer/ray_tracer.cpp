@@ -31,7 +31,7 @@ sf::Image RayTracer::render( const Scene &scene, unsigned width, unsigned height
         for ( unsigned i = 0; i < width; ++i ) {
             pixelRay = glm::rotate( pixelRay, fovWidthPerPixel, up_ );
 
-            image.setPixel( i, j, rayTrace( scene, scene.cameraPosition, pixelRay ));
+            image.setPixel( i, j, toSfmlColor( rayTrace( scene, scene.cameraPosition, pixelRay )));
         }
 
         pixelRay = glm::rotate( pixelRay, -scene.widthFieldOfView, up_ );
@@ -40,7 +40,9 @@ sf::Image RayTracer::render( const Scene &scene, unsigned width, unsigned height
     return image;
 }
 
-sf::Color RayTracer::rayTrace( const Scene &scene, const glm::dvec3 &rayOrigin, const glm::dvec3 &rayDirection ) const {
+glm::dvec3 RayTracer::rayTrace( const Scene &scene,
+                                const glm::dvec3 &rayOrigin, const glm::dvec3 &rayDirection ) const {
+
     bool foundIntersection = false;
     double intersectionDistance;
     glm::dvec3 intersectionNormal;
@@ -59,7 +61,7 @@ sf::Color RayTracer::rayTrace( const Scene &scene, const glm::dvec3 &rayOrigin, 
 
     if ( foundIntersection ) {
         auto intersectionPoint = rayOrigin + intersectionDistance * rayDirection;
-        sf::Color color = sf::Color::Black;
+        glm::dvec3 color{ 0.0, 0.0, 0.0 };
 
         auto reflectedRay = glm::reflect( rayDirection, intersectionNormal );
 
@@ -69,16 +71,15 @@ sf::Color RayTracer::rayTrace( const Scene &scene, const glm::dvec3 &rayOrigin, 
 
                 // Add diffuse lighting
                 {
-                    auto intensity = glm::dot( towardsLight, intersectionNormal );
-                    color += toSfmlColor(
-                        intensity * toGlmColor( light.color ) * toGlmColor( intersectionShape->color ));
+                    auto intensity = std::max( glm::dot( towardsLight, intersectionNormal ), 0.0 );
+                    color += intensity * light.color * intersectionShape->color;
                 }
 
                 // Add specular lighting
                 {
-                    auto intensity = intersectionShape->shininess * glm::dot( towardsLight, reflectedRay );
-                    color += toSfmlColor(
-                        intensity * toGlmColor( light.color ) * toGlmColor( intersectionShape->color ));
+                    auto intensity = std::max( glm::dot( towardsLight, reflectedRay ), 0.0 );
+                    intensity *= intersectionShape->shininess;
+                    color += intensity * light.color;
                 }
             }
         }
@@ -86,7 +87,7 @@ sf::Color RayTracer::rayTrace( const Scene &scene, const glm::dvec3 &rayOrigin, 
         return color;
     }
 
-    return sf::Color::Black;
+    return glm::dvec3{ 0.0, 0.0, 0.0 };
 }
 
 std::tuple< bool, double, glm::dvec3 > RayTracer::checkCollision( const Shape &shape, const glm::dvec3 &rayOrigin,

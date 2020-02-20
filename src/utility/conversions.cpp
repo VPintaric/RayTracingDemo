@@ -9,5 +9,5 @@ glm::dvec3 toGlmColor( const sf::Color &c ) {
 }
 
 sf::Color toSfmlColor( const glm::dvec3 &c ) {
-    return sf::Color( c.r * 255, c.g * 255, c.b * 255 );
+    return sf::Color( std::min( c.r * 255, 255.0 ), std::min( c.g * 255, 255.0 ), std::min( c.b * 255, 255.0 ));
 }

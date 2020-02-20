@@ -23,7 +23,7 @@ private:
 
     Logger &logger_;
 
-    sf::Color rayTrace( const Scene &scene, const glm::dvec3 &rayOrigin, const glm::dvec3 &rayDirection ) const;
+    glm::dvec3 rayTrace( const Scene &scene, const glm::dvec3 &rayOrigin, const glm::dvec3 &rayDirection ) const;
 
     std::tuple< bool, double, glm::dvec3 >
     checkCollision( const Shape &shape, const glm::dvec3 &rayOrigin, const glm::dvec3 &rayDirection ) const;

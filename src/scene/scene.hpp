@@ -31,7 +31,7 @@ struct Cuboid {
 
 struct Shape {
     ShapeType type;
-    sf::Color color;
+    glm::dvec3 color;
     double shininess;
     union {
         Sphere sphere;
@@ -41,7 +41,7 @@ struct Shape {
 
 struct Light {
     glm::dvec3 position;
-    sf::Color color;
+    glm::dvec3 color;
 };
 
 struct Scene {
